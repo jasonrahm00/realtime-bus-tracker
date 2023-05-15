@@ -1,7 +1,15 @@
-#map {
-  height: 100vh;
+* {
+  box-sizing: border-box;
 }
 
-footer {
+body {
+  margin: 0;
+}
+
+#selector {
   padding: 1rem;
+}
+
+#map {
+  height: calc(100vh - 51px);
 }

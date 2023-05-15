@@ -1,25 +1,64 @@
 const busIcons = [
   ['bus1.png', 'bus2.png']
 ];
+const allTransitRoutes = [];
+const selector = document.getElementById('route-selector');
+
 let map;
 let mapCenter = { lat:42.353350, lng:-71.091525 };
 let markers = [];
+let routeId = '';
 
-// Request bus data from MBTA
+// Get all transit routes
+(async function getAllRoutes() {
+  const url = 'https://api-v3.mbta.com/routes';
+  const response = await fetch(url);
+  const json = await response.json();
+  const data = await json.data;
+
+  data.forEach(route => {
+    let entry = {
+      id: route.id,
+      type: route.attributes.type,
+      name: route.attributes.long_name
+    };
+
+    let option = document.createElement('option');
+    option.value = entry.id;
+    option.text = entry.name;
+
+    selector.appendChild(option);
+    allTransitRoutes.push(entry);
+  });
+  selector.addEventListener('change', selectRoute)
+})();
+
+// Clear markers
+function clearMarkers() {
+  markers.forEach(marker => {
+    marker.marker.setMap(null);
+  })
+  markers = [];
+}
+
+// Handle change event from selector
+function selectRoute(e) {
+  let selectedRoute = e.target.value;
+  if (routeId === selectedRoute) return;
+  clearMarkers();
+  routeId = selectedRoute;
+  placeMarkers();
+}
+
+// Request route data from MBTA
 async function getBusLocations() {
-  const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+  const url = `https://api-v3.mbta.com/vehicles?filter[route]=${routeId}&include=trip`;
   const response = await fetch(url);
   const json = await response.json();
   return json.data;
 }
 
-(async function getAllRoutes() {
-  const url = 'https://api-v3.mbta.com/routes';
-  const response = await fetch(url);
-  const json = await response.json();
-  console.log(json.data);
-})()
-
+// Place markers on map
 async function placeMarkers() {
   // Get all buses from API
   let buses = await getBusLocations();
@@ -67,7 +106,7 @@ async function createMarker(bus) {
       lat: bus.attributes.latitude,
       lng: bus.attributes.longitude
     },
-    icon: busIcons[0][bus.attributes.direction_id]
+    // icon: busIcons[0][bus.attributes.direction_id]
   });
 
   markers.push({
@@ -86,8 +125,5 @@ async function createMarker(bus) {
     center: mapCenter,
     zoom: 14
   });
-
-  // Call placeMarkers function to add markers to the map
-  placeMarkers();
 
 })();
