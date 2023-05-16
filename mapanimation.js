@@ -8,6 +8,7 @@ let map;
 let mapCenter = { lat:42.353350, lng:-71.091525 };
 let markers = [];
 let routeId = '';
+let routePath = null;
 
 /**
  * Anonymous initialization functions
@@ -38,14 +39,12 @@ let routeId = '';
 })();
 
 // Create and initialize google map
-(async () => {
+(async () => {  
   const { Map } = await google.maps.importLibrary("maps");
-  
   map = new Map(document.getElementById("map"), {
     center: mapCenter,
     zoom: 14
   });
-
 })();
 
 /**
@@ -53,19 +52,73 @@ let routeId = '';
  */
 
 // Clear markers
-function clearMarkers() {
+function clearMap() {
+
+  // Remove route path
+  routePath.setMap(null);
+
+  // Remove markers
   markers.forEach(marker => {
     marker.marker.setMap(null);
   })
   markers = [];
+
+}
+
+// Get route outline
+async function getPath(shape) {
+  
+  // Decode polyline shapes into Lat/Long coords then re-encode it using gMaps and add to map
+  return encoding.decodePath(shape.attributes.polyline);
+}
+
+async function traceRoute() {
+
+  const {encoding} = await google.maps.importLibrary("geometry");
+
+  // Retrieve route polyline from MTBA
+  const url = `https://api-v3.mbta.com/shapes?filter[route]=${routeId}`;
+  const response = await fetch(url);
+  const json = await response.json();
+  const shapes = json.data;
+  let segments = [];
+
+  shapes.forEach(shape => {
+    const path = encoding.decodePath(shape.attributes.polyline);
+    path.forEach(segment => segments.push({lat: segment.lat(), lng: segment.lng()}));
+  });
+
+  routePath = new google.maps.Polyline({
+    path: segments,
+    geodesic: true,
+    strokeColor: '#0000ff',
+    strokeOpacity: 1,
+    strokeWeight: 5
+  });
+
+  routePath.setMap(map);
+
+  // let bounds = new google.maps.LatLngBounds();
+
+  // shapes.forEach(async shape => {
+  //   let path = await getPath(shape);
+  //   path.forEach(point => {
+  //     bounds.extend(new google.maps.LatLng(point.lat(), point.lng()));
+  //   })
+  // });
+
+  // Adjust map center so it's focused on route
+  //map.fitBounds(bounds);
+  
 }
 
 // Handle change event from selector
 function selectRoute(e) {
   let selectedRoute = e.target.value;
   if (routeId === selectedRoute) return;
-  clearMarkers();
+  if (routePath !== null) clearMap();
   routeId = selectedRoute;
+  traceRoute();
   placeMarkers();
 }
 
