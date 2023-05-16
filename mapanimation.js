@@ -21,6 +21,7 @@ let routePath = null;
   const json = await response.json();
   const data = await json.data;
 
+  // Create options for each route returned form API
   data.forEach(route => {
     let entry = {
       id: route.id,
@@ -35,7 +36,10 @@ let routePath = null;
     selector.appendChild(option);
     allTransitRoutes.push(entry);
   });
+
+  // Attach event listener to newly created selector
   selector.addEventListener('change', selectRoute);
+
 })();
 
 // Create and initialize google map
@@ -66,14 +70,7 @@ function clearMap() {
 }
 
 // Get route outline
-async function getPath(shape) {
-  
-  // Decode polyline shapes into Lat/Long coords then re-encode it using gMaps and add to map
-  return encoding.decodePath(shape.attributes.polyline);
-}
-
 async function traceRoute() {
-
   const {encoding} = await google.maps.importLibrary("geometry");
 
   // Retrieve route polyline from MTBA
@@ -82,12 +79,26 @@ async function traceRoute() {
   const json = await response.json();
   const shapes = json.data;
   let segments = [];
+  let bounds = new google.maps.LatLngBounds();
 
+  // Iterate over each polyline and convert into geo coordinates for use by gMaps
   shapes.forEach(shape => {
     const path = encoding.decodePath(shape.attributes.polyline);
-    path.forEach(segment => segments.push({lat: segment.lat(), lng: segment.lng()}));
+
+    // Decode into Lag/Long Coordinates
+    path.forEach(segment => {
+      let latLong = {lat: segment.lat(), lng: segment.lng()};
+
+      // Change the bounding box of the map to focus on the route data
+      bounds.extend(new google.maps.LatLng(latLong.lat, latLong.lng));
+
+      // Push coordinate objects to array for later use
+      segments.push(latLong);
+    });
+
   });
 
+  // Generate polyline of route using available segments
   routePath = new google.maps.Polyline({
     path: segments,
     geodesic: true,
@@ -96,30 +107,30 @@ async function traceRoute() {
     strokeWeight: 5
   });
 
+  // Add the path to the map
   routePath.setMap(map);
 
-  // let bounds = new google.maps.LatLngBounds();
-
-  // shapes.forEach(async shape => {
-  //   let path = await getPath(shape);
-  //   path.forEach(point => {
-  //     bounds.extend(new google.maps.LatLng(point.lat(), point.lng()));
-  //   })
-  // });
-
-  // Adjust map center so it's focused on route
-  //map.fitBounds(bounds);
+  // Recenter and re-zoom the map to focus on the route
+  map.setCenter(bounds.getCenter());
+  map.fitBounds(bounds);
   
 }
 
 // Handle change event from selector
 function selectRoute(e) {
   let selectedRoute = e.target.value;
+
+  // Do nothing if the same route is selected
   if (routeId === selectedRoute) return;
+
+  // Only clear map if there is already a route
   if (routePath !== null) clearMap();
+
+  // Add new data to map
   routeId = selectedRoute;
   traceRoute();
   placeMarkers();
+
 }
 
 // Request route data from MBTA
