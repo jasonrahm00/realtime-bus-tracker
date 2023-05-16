@@ -1,8 +1,10 @@
 /**
  * Global variable declaration
  */
+
 const allTransitRoutes = [];
 const selector = document.getElementById('route-selector');
+const baseApiUrl = 'https://api-v3.mbta.com'
 
 let map;
 let mapCenter = { lat:42.353350, lng:-71.091525 };
@@ -16,12 +18,12 @@ let routePath = null;
 
 // Get all transit routes
 (async () => {
-  const url = 'https://api-v3.mbta.com/routes';
+  const url = `${baseApiUrl}/routes`;
   const response = await fetch(url);
   const json = await response.json();
   const data = await json.data;
 
-  // Create options for each route returned form API
+  // Create option elements for each route returned form API
   data.forEach(route => {
     let entry = {
       id: route.id,
@@ -74,7 +76,7 @@ async function traceRoute() {
   const {encoding} = await google.maps.importLibrary("geometry");
 
   // Retrieve route polyline from MTBA
-  const url = `https://api-v3.mbta.com/shapes?filter[route]=${routeId}`;
+  const url = `${baseApiUrl}/shapes?filter[route]=${routeId}`;
   const response = await fetch(url);
   const json = await response.json();
   const shapes = json.data;
@@ -117,6 +119,9 @@ async function traceRoute() {
 }
 
 // Handle change event from selector
+// TODO: Figure out how to handle routes that are broken
+  // Some return no polyline
+  // Others return no data at all and throw console errors
 function selectRoute(e) {
   let selectedRoute = e.target.value;
 
@@ -135,7 +140,7 @@ function selectRoute(e) {
 
 // Request route data from MBTA
 async function getLocations() {
-  const url = `https://api-v3.mbta.com/vehicles?filter[route]=${routeId}&include=trip`;
+  const url = `${baseApiUrl}/vehicles?filter[route]=${routeId}&include=trip`;
   const response = await fetch(url);
   const json = await response.json();
   return json.data;
@@ -167,9 +172,10 @@ async function placeMarkers() {
 function moveMarker(marker, vehicle) {
 
   // Update marker direction and icon if different
-  if (marker.direction !== vehicle.attributes.direction_id) {
-    marker.direction = vehicle.attributes.direction_id;
-  }
+  // TODO: Add unique icons for different route types
+    // if (marker.direction !== vehicle.attributes.direction_id) {
+    //   marker.direction = vehicle.attributes.direction_id;
+    // }
 
   // Update marker position if marker exists
   marker.marker.setPosition({
