@@ -14,14 +14,17 @@ This project was created as an assingment for the MIT Full-Stack MERN Certificat
 - Adjusted the map center, zoom and boundaries to focus on the activated route 
 ### Improvement Roadmap
 - Handle empty/buggy results: Some route display nothing on the map or cause console errors, those need to be handled
+- General code cleanup: code is a little dirty, presently
 - Add "Reset" button to the interface to clear current route and reset center of map
-- Add a way to distinguish the different route types (bus, train, commuter, ferry), either through groupes in the selector or radio buttons
+- Add a way to distinguish the different route types (bus, train, commuter, ferry), either through groups in the selector or radio buttons
 - Replace the default map marker with custom icons for each route type
+- Improve overall styling: current efforts focused solely on functionality
 - Distinguish the direction the vehicle is moving
+- Investigate replacing GMaps with Mapbox (might allow easier customization of map)???
 ## Implementation
 - Clone the repository
 - Create your own [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key)
-- Add the API Key to the <script> tag in the index.html file where it says: Your_API_Key
+- Add the API Key to the script tag in the index.html file where it says: Your_API_Key
 - Load the index.html into the browser or use a local server
 ## Licensing
 Licensed under the terms of the MIT license.
