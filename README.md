@@ -1,6 +1,6 @@
 # Real Time Bus Tracker
 
-The goal of this project was to track real-time locations of busses in the Massachusetts Bay Transportation Authority (MBTA). This project was created as an assingment for the MIT Full-Stack MERN Certification. For information on other projects I created for this certficiation, visit my [Github Portfolio Page](https://jasonrahm00.github.io/)
+The goal of this project was to track real-time locations of busses in the Massachusetts Bay Transportation Authority (MBTA). This project was created as an assingment for the MIT Full-Stack MERN Certification. For information on other projects I created for this certficiation, visit my [Github Portfolio Page](https://jasonrahm00.github.io/).
 
 ## Features
 
@@ -34,8 +34,8 @@ The goal of this project was to track real-time locations of busses in the Massa
 
 - Clone, fork or download the repository [Real Time Bus Tracker Repository](https://github.com/jasonrahm00/realtime-bus-tracker)
 - Create your own [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key)
-- Add the API Key to the script tag in the index.html file where it says: Your_API_Key
-- Load the index.html into the browser or use a local server
+- Add the API Key to the script tag in the bus-tracker.html file where it says: Your_API_Key
+- Load the bus-tracker.html into the browser or use a local server
 
 ## Licensing
 
