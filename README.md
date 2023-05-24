@@ -29,7 +29,7 @@ The goal of this project was to track real-time locations of busses in the Massa
 - Replace the default map marker with custom icons for each route type
 - Improve overall styling: current efforts focused solely on functionality
 - Distinguish the direction the vehicle is moving
-- Investigate whether or not decoding of the route polyline is necessary to add to map. 
+- Investigate whether or not decoding of the route polyline is necessary to add to map 
   - GMaps documentation shows you have to decode then re-encode to add to the map
   - This seems like an unnecessary step
 - Investigate replacing GMaps with Mapbox (might allow easier customization of map)???
