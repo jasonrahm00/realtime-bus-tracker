@@ -21,13 +21,17 @@ The goal of this project was to track real-time locations of busses in the Massa
 
 ### Improvement Roadmap
 
-- Handle empty/buggy results: Some route display nothing on the map or cause console errors, those need to be handled
+- Handle empty/buggy results: Some routes display nothing on the map or cause console errors, those need to be handled
 - General code cleanup: code is a little dirty, presently
+- Check routes against live examples from MBTA, some of the polylines are really complicated and want to verify they are accurate
 - Add "Reset" button to the interface to clear current route and reset center of map
 - Add a way to distinguish the different route types (bus, train, commuter, ferry), either through groups in the selector or radio buttons
 - Replace the default map marker with custom icons for each route type
 - Improve overall styling: current efforts focused solely on functionality
 - Distinguish the direction the vehicle is moving
+- Investigate whether or not decoding of the route polyline is necessary to add to map. 
+  - GMaps documentation shows you have to decode then re-encode to add to the map
+  - This seems like an unnecessary step
 - Investigate replacing GMaps with Mapbox (might allow easier customization of map)???
 
 ## Implementation
