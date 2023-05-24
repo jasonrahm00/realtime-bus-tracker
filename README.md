@@ -32,7 +32,7 @@ The goal of this project was to track real-time locations of busses in the Massa
 
 ## Implementation
 
-- Clone, fork or download the repository [Real Time Bus Tracker Repository](https://github.com/jasonrahm00/realtime-bus-tracker)
+- Clone, fork or download the repository
 - Create your own [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key)
 - Add the API Key to the script tag in the bus-tracker.html file where it says: Your_API_Key
 - Load the bus-tracker.html into the browser or use a local server
