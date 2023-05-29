@@ -1,6 +1,6 @@
 # Real Time Bus Tracker
 
-The goal of this project is to track real-time locations of busses in the Massachusetts Bay Transportation Authority (MBTA). Bus data was retrieved from the MBTA API and their API documentation was utilized to determine how to extract necessary data poitns. This project was created as an assingment for the MIT Full-Stack MERN Certification. For information on other projects I created for this certficiation, visit my [Github Portfolio Page](https://jasonrahm00.github.io/).
+The goal of this project is to track real-time locations of busses in the Massachusetts Bay Transportation Authority (MBTA). Bus data was retrieved from the MBTA API and their API documentation was utilized to determine how to extract necessary data points. This project was created as an assingment for the MIT Full-Stack MERN Certification. For information on other projects I created for this certficiation, visit my [Github Portfolio Page](https://jasonrahm00.github.io/).
 
 ## Features
 
